@@ -18,6 +18,15 @@ DATA = {
     },
     # можете добавить свои рецепты ;)
 }
+def get_recipes(request, name):
+    count = int(request.GET.get('servings', 1))
+    value = dict(DATA.items()).get(name)
+    if count > 1:
+        for key in value:
+            value.update({key: value[key] * count})
+    context = {
+        'recipe': dict(DATA.items()).get(name)}
+    return render(request, 'calculator/index.html', context)
 
 # Напишите ваш обработчик. Используйте DATA как источник данных
 # Результат - render(request, 'calculator/index.html', context)
