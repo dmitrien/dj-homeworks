@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{ phone.name }}{% endblock %}
+
+{% block content %}
+  <div class="container">
+  <div class="header">
+    <h5>
+      <a href="{% url 'books' %}">Вернуться в каталог</a>
+    </h5>
+    <h1>{{ book.name }}</h1>
+  </div>
+
+  <div class="content">
+      {% for book in book %}
+      <div class="book col-md-4">
+         <h2>{{ book.name }}</h2>
+         <p>Автор: {{ book.author }}</p>
+         <p>Дата публикации: {{ book.pub_date }}</p>
+      </div>
+      {% endfor %}
+        <a class="button button-primary" href="{% url 'book' page.previous_page %}">{{ page.previous_page }}</a>
+        <a class="button button-primary" href="{% url 'book' page.next_page %}">{{ page.next_page }}</a>
+  </div>
+{% endblock %}
