@@ -14,3 +14,18 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30, verbose_name='Тег')
+    article_tag = models.ManyToManyField(Article, through='Scope')
+
+    def __str__(self):
+        return self.name
+
+class Scope(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, related_name='scopes')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, related_name='scopes')
+    is_main = models.BooleanField(verbose_name='Главный раздел', default=False)
+
+    class Meta:
+        ordering = ['-is_main']
