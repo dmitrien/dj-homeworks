@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django_filters import DateFromToRangeFilter
 from rest_framework import serializers
 
 from advertisements.models import Advertisement
@@ -19,7 +20,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     creator = UserSerializer(
         read_only=True,
     )
-
     class Meta:
         model = Advertisement
         fields = ('id', 'title', 'description', 'creator',
@@ -39,7 +39,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
-
-        # TODO: добавьте требуемую валидацию
-
+        creator = self.context["request"].user
+        if self.initial_data.get('status') == 'OPEN' and len(Advertisement.objects.filter(status="OPEN").filter(creator=creator)) > 10:
+            raise serializers.ValidationError("У вас и так много открытых объявлений!")
         return data
